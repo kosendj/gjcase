@@ -11,4 +11,7 @@
         .col-md-8
           %h1 gjcase
     %section.container
+      - if notice.present?
+        .alert.alert-success= notice
+
       = yield
