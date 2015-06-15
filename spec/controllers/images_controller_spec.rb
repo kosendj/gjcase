@@ -131,6 +131,10 @@ RSpec.describe ImagesController, type: :controller do
     end
 
     context "with invalid params" do
+      def invalid_attributes
+        {source_url: 'http://example.com/xxx.png'}
+      end
+
       it "assigns the image as @image" do
         image = Image.create! valid_attributes
         put :update, {:id => image.to_param, :image => invalid_attributes}, valid_session
