@@ -1,0 +1,9 @@
+%section.image-full
+  %img{src: @image.image_url}
+  %p= @image.comment
+  %ul
+    %li Source: #{@image.source_url}
+    -# dupe, sha, storage path
+
+  %p
+    = link_to 'Edit', edit_image_path(@image)
