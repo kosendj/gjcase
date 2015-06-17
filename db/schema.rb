@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150617164121) do
+ActiveRecord::Schema.define(version: 20150617172737) do
 
   create_table "images", force: :cascade do |t|
     t.string   "source_url",     limit: 255
@@ -23,6 +23,16 @@ ActiveRecord::Schema.define(version: 20150617164121) do
     t.datetime "updated_at",                   null: false
   end
 
+  create_table "tag_assignments", force: :cascade do |t|
+    t.integer  "tag_id",     limit: 4
+    t.integer  "image_id",   limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "tag_assignments", ["image_id"], name: "index_tag_assignments_on_image_id", using: :btree
+  add_index "tag_assignments", ["tag_id"], name: "index_tag_assignments_on_tag_id", using: :btree
+
   create_table "tags", force: :cascade do |t|
     t.string   "name",         limit: 255
     t.string   "alt_name",     limit: 255
@@ -32,4 +42,6 @@ ActiveRecord::Schema.define(version: 20150617164121) do
     t.datetime "updated_at",               null: false
   end
 
+  add_foreign_key "tag_assignments", "images"
+  add_foreign_key "tag_assignments", "tags"
 end
