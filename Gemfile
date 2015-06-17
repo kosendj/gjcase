@@ -21,6 +21,10 @@ gem 'faml'
 gem 'sqlite3'
 gem 'mysql2'
 
+group :development do
+  gem 'haml-rails'
+end
+
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
