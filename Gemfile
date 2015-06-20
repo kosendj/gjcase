@@ -18,7 +18,7 @@ gem 'faml'
 
 gem 'kaminari'
 
-gem 'react-rails'
+gem 'react-rails', git: 'https://github.com/reactjs/react-rails'
 
 # gem 'therubyracer', platforms: :ruby
 
