@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :tags
+  resources :tags do
+    member do
+      post :merge_to
+      post :link
+    end
+  end
 
   resources :images do
     resources :image_tags, path: 'tags', only: %i(create destroy)

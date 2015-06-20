@@ -1,9 +1,39 @@
-%p#notice= notice
-
 %p
   %b Name:
   = @tag.name
 
-= link_to 'Edit', edit_tag_path(@tag)
-\|
+
+- if @tag.children.present?
+  %section.tag-children.panel.panel-default
+    .panel-heading Children
+    .panel-body
+      %ul
+        - @tag.children.each do |x|
+          %li= link_to x.name, x
+
+- aliases = @tag.aliases.pluck(:name)
+- if aliases
+  %section.tag-aliases.panel.panel-default
+    .panel-heading Aliases
+    .panel-body
+      %ul
+        - aliases.each do |x|
+          %li= x
+
+.panel.panel-default
+  .panel-heading Actions
+  .panel-body
+    %section.tag-actions
+      = link_to 'Edit', edit_tag_path(@tag), class: 'btn btn-default'
+      = link_to 'Destroy', @tag, method: :delete, class: 'btn btn-danger', data: {confirm: 'sure?'}
+    %section.tag-merger
+      = form_tag merge_to_tag_path(@tag), class: 'form form-inline' do
+        = text_field_tag :target_id, '', list: 'tags_datalist', class: 'form-control'
+        = submit_tag 'Merge to', class: 'form-control btn btn-primary'
+
+    %section.tag-linker
+      = form_tag link_tag_path(@tag), class: 'form form-inline' do
+        = text_field_tag :target_id, '', list: 'tags_datalist', class: 'form-control'
+        = submit_tag 'Link to', class: 'form-control btn btn-primary'
+
 = link_to 'Back', tags_path

@@ -156,4 +156,25 @@ RSpec.describe TagsController, type: :controller do
     end
   end
 
+  describe "POST #merge_to" do
+    it "merges tag to :target" do
+      tag = create(:tag, name: 'a')
+      target = create(:tag, name: 'b')
+
+      post :merge_to, {id: tag.to_param, target_id: target.to_param}, valid_session
+
+      expect(tag.reload.merged_tag).to eq target
+    end
+  end
+
+  describe "POST #link" do
+    it "sets parent" do
+      tag = create(:tag, name: 'a')
+      target = create(:tag, name: 'b')
+
+      post :link, {id: tag.to_param, target_id: target.to_param}, valid_session
+
+      expect(tag.reload.parent).to eq target
+    end
+  end
 end

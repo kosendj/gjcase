@@ -1,10 +1,11 @@
 class TagsController < ApplicationController
-  before_action :set_tag, only: [:show, :edit, :update, :destroy]
+  before_action :set_tag, only: [:show, :edit, :update, :destroy, :link, :merge_to]
+  before_action :set_target, only: %i(link merge_to)
 
   # GET /tags
   # GET /tags.json
   def index
-    @tags = Tag.all
+    @tags = Tag.active
   end
 
   # GET /tags/1
@@ -61,10 +62,32 @@ class TagsController < ApplicationController
     end
   end
 
+  def link
+    @tag.update_attributes!(parent: @target)
+
+    respond_to do |format|
+      format.html { redirect_to @tag, notice: 'Tag successfully updated' }
+      format.json { head :no_content }
+    end
+  end
+
+  def merge_to
+    @tag.merge_to!(@target)
+
+    respond_to do |format|
+      format.html { redirect_to @tag, notice: 'Tag successfully updated' }
+      format.json { head :no_content }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_tag
-      @tag = Tag.find(params[:id])
+      @tag = Tag.search!(params[:id])
+    end
+
+    def set_target
+      @target = Tag.search!(params[:target_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

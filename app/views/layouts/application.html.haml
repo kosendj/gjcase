@@ -6,6 +6,11 @@
     = stylesheet_link_tag 'application' , media: 'all'
     = javascript_include_tag 'application'
   %body
+    .hidden
+      %datalist#tags_datalist
+        - Tag.active.each do |tag|
+          %option{value: tag.name, "data-tag_id": tag.id.to_s}= tag.name
+
     %header.header-top.container
       .row.align-vertical
         .col-md-8
