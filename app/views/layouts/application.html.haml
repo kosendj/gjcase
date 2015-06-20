@@ -12,11 +12,11 @@
         - Tag.active.each do |tag|
           %option{value: tag.name, "data-tag_id": tag.id.to_s}= tag.name
 
-    %header.header-top.container
+    %header.header-top.container-fluid
       .row.align-vertical
         .col-md-8
           %h1 gjcase
-    %section.container
+    %section.container-fluid
       - if notice.present?
         .alert.alert-success= notice
 
