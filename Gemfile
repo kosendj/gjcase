@@ -16,6 +16,8 @@ gem 'unicorn'
 
 gem 'faml'
 
+gem 'kaminari'
+
 # gem 'therubyracer', platforms: :ruby
 
 gem 'sqlite3'
