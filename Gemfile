@@ -18,6 +18,8 @@ gem 'faml'
 
 gem 'kaminari'
 
+gem 'react-rails'
+
 # gem 'therubyracer', platforms: :ruby
 
 gem 'sqlite3'
