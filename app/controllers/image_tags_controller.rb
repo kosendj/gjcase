@@ -23,6 +23,6 @@ class ImageTagsController < ApplicationController
   end
 
   def set_tag
-    @tag = Tag.find(params[:id])
+    @tag = Tag.search!(params[:id])
   end
 end
