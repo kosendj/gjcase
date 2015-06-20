@@ -7,13 +7,19 @@ class ImageTagsController < ApplicationController
       @image.tags << @tag
     end
 
-    redirect_to @image
+    respond_to do |format|
+      format.html { redirect_to @image }
+      format.json { render(json: {tag: @tag, image: @image}) }
+    end
   end
 
   def destroy
     @image.tags.delete(@tag)
 
-    redirect_to @image
+    respond_to do |format|
+      format.html { redirect_to @image }
+      format.json { render(json: {tag: @tag, image: @image}) }
+    end
   end
 
   private

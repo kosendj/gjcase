@@ -1,9 +1,29 @@
 %section.image-full
   %img{src: @image.image_url}
-  %p= @image.comment
+
+  %p.image-comment= @image.comment
+
   %ul
     %li Source: #{@image.source_url}
     -# dupe, sha, storage path
 
-  %p
-    = link_to 'Edit', edit_image_path(@image)
+  %section.image-tags.panel.panel-default{data: {image_id: @image.id}}
+    .panel-heading Tags
+    .panel-body
+      .image-tags-labels
+        %button.btn.btn-default.image-tags-editor_start_btn Edit
+        - @image.tags.each do |tag|
+          = link_to tag.name, tag, class: 'label label-primary', data: {tag_id: tag.id}
+        - if @image.tags.empty?
+          No Tags
+      .image-tags-editor{style: 'display: none;'}
+        %button.btn.btn-default.image-tags-editor_finish_btn Done
+        %ul
+          - @image.tags.each do |tag|
+            %li.image-tags-editor_tag_listitem{data: {tag_id: tag.id}}= tag.name
+        %form.form.form-inline{action: '#'}
+          %input.form-control.image-tags-editor_tag_field{type: 'text', list: 'tags_datalist'}
+          %button.btn.btn-primary Add tag
+
+  %section.image-actions
+    = link_to 'Edit', edit_image_path(@image), class: 'btn btn-default'
