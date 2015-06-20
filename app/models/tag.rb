@@ -9,7 +9,7 @@ class Tag < ActiveRecord::Base
   has_many :images, through: :tag_assignments
 
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
 
   validate :validate_not_merged_with_itself
   validate :validate_parent_is_not_itself
