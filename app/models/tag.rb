@@ -10,6 +10,8 @@ class Tag < ActiveRecord::Base
   property :parent, selectable: true
   collection :children, selectable: true
 
+  collection :images, selectable: true
+
   link(:parent) { self.parent && api_tag_path(self.parent) }
   link(:merged_tag) { self.merged_tag && api_tag_path(self.merged_tag) }
   link(:self) { api_tag_path(self) }
