@@ -3,9 +3,16 @@ class Tag < ActiveRecord::Base
 
   property :name
   property :alt_name
+
+  property :merged_tag, selectable: true
+  collection :aliases, selectable: true
+
+  property :parent, selectable: true
   collection :children, selectable: true
-  # link(:parent) { parent
-  # link(:merged_to) { 
+
+  link(:parent) { self.parent && api_tag_path(self.parent) }
+  link(:merged_tag) { self.merged_tag && api_tag_path(self.merged_tag) }
+  link(:self) { api_tag_path(self) }
 
   belongs_to :parent, class_name: 'Tag', foreign_key: :parent_id
   has_many :children, class_name: 'Tag', foreign_key: :parent_id

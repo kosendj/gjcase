@@ -25,7 +25,7 @@ RSpec.describe "Api::ImagesController", type: :request do
         get api_images_path(format: :json, fields: '__default__,tags')
         expect(response).to have_http_status(200)
         expect(response.body).to be_json([
-          {id: @image_a.id, image_url: @image_a.image_url, comment: 'a', tags: [alt_name: nil, name: 'tag']},
+          {id: @image_a.id, image_url: @image_a.image_url, comment: 'a', tags: [alt_name: nil, name: 'tag', _links: Hash]},
           {id: @image_b.id, image_url: @image_b.image_url, comment: 'b', tags: []},
         ])
       end

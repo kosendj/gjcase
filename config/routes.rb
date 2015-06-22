@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     resources :images
+    resources :tags
   end
 
   resources :tags do
