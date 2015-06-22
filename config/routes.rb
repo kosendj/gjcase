@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   namespace :api do
-    resources :images
+    resources :images do
+      resources :image_tags, path: 'tags', only: %i(index show create destroy)
+    end
     resources :tags
   end
 

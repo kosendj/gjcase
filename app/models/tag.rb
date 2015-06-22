@@ -1,6 +1,7 @@
 class Tag < ActiveRecord::Base
   include Garage::Representer 
 
+  property :id
   property :name
   property :alt_name
 
