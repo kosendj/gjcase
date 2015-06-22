@@ -14,8 +14,8 @@ RSpec.describe "Api::ImagesController", type: :request do
         get api_images_path(format: :json)
         expect(response).to have_http_status(200)
         expect(response.body).to be_json([
-          {id: @image_a.id, image_url: @image_a.image_url, comment: 'a'},
-          {id: @image_b.id, image_url: @image_b.image_url, comment: 'b'},
+          {id: @image_a.id, image_url: @image_a.image_url, comment: 'a', _links: Hash},
+          {id: @image_b.id, image_url: @image_b.image_url, comment: 'b', _links: Hash},
         ])
       end
     end
@@ -25,8 +25,8 @@ RSpec.describe "Api::ImagesController", type: :request do
         get api_images_path(format: :json, fields: '__default__,tags')
         expect(response).to have_http_status(200)
         expect(response.body).to be_json([
-          {id: @image_a.id, image_url: @image_a.image_url, comment: 'a', tags: [id: Integer, alt_name: nil, name: 'tag', _links: Hash]},
-          {id: @image_b.id, image_url: @image_b.image_url, comment: 'b', tags: []},
+          {id: @image_a.id, image_url: @image_a.image_url, comment: 'a', _links: Hash, tags: [id: Integer, alt_name: nil, name: 'tag', _links: Hash]},
+          {id: @image_b.id, image_url: @image_b.image_url, comment: 'b', _links: Hash, tags: []},
         ])
       end
     end
@@ -36,7 +36,7 @@ RSpec.describe "Api::ImagesController", type: :request do
         get api_images_path(format: :json, tags: 'tag')
         expect(response).to have_http_status(200)
         expect(response.body).to be_json([
-          {id: @image_a.id, image_url: @image_a.image_url, comment: 'a'},
+          {id: @image_a.id, image_url: @image_a.image_url, comment: 'a', _links: Hash},
         ])
       end
     end
@@ -46,7 +46,7 @@ RSpec.describe "Api::ImagesController", type: :request do
         get api_images_path(format: :json, tags: tag.id)
         expect(response).to have_http_status(200)
         expect(response.body).to be_json([
-          {id: @image_a.id, image_url: @image_a.image_url, comment: 'a'},
+          {id: @image_a.id, image_url: @image_a.image_url, comment: 'a', _links: Hash},
         ])
       end
     end
