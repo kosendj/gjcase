@@ -1,4 +1,12 @@
 class Tag < ActiveRecord::Base
+  include Garage::Representer 
+
+  property :name
+  property :alt_name
+  collection :children, selectable: true
+  # link(:parent) { parent
+  # link(:merged_to) { 
+
   belongs_to :parent, class_name: 'Tag', foreign_key: :parent_id
   has_many :children, class_name: 'Tag', foreign_key: :parent_id
 

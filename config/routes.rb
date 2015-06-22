@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :api do
+    resources :images
+  end
+
   resources :tags do
     member do
       post :merge_to

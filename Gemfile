@@ -17,6 +17,8 @@ gem 'unicorn'
 gem 'faml'
 
 gem 'kaminari'
+gem 'garage', git: 'https://github.com/cookpad/garage'
+gem 'responders'
 
 gem 'react-rails', git: 'https://github.com/reactjs/react-rails'
 
@@ -30,6 +32,8 @@ group :development do
 end
 
 group :development, :test do
+  gem 'rspec-json_matcher'
+
   gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
