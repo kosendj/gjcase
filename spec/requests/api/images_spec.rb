@@ -51,4 +51,26 @@ RSpec.describe "Api::ImagesController", type: :request do
       end
     end
   end
+
+  describe "POST /api/images" do
+    it "creates image" do
+      post api_images_path(format: :json), source_url: 'http://localhost:3000/test_source/foo.gif', comment: 'beautiful'
+      expect(response).to have_http_status(201)
+
+      image = Image.last
+      expect(image.source_url).to eq 'http://localhost:3000/test_source/foo.gif'
+      expect(image.comment).to eq 'beautiful'
+    end
+  end
+
+  describe "PUT /api/images/:id" do
+    let(:image) { create(:image, comment: 'foo') }
+
+    it "updates image" do
+      put api_image_path(image, format: :json), comment: 'bar'
+      expect(response).to have_http_status(204)
+
+      expect(image.reload.comment).to eq 'bar'
+    end
+  end
 end

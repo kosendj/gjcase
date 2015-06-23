@@ -20,7 +20,20 @@ class Api::ImagesController < Api::BaseController
     @resource = Image.find(params[:id])
   end
 
+  def create_resource
+    @resource = Image.create!(image_params)
+  end
+
+  def update_resource
+    @resource.update_attributes! image_params
+    @resource
+  end
+
   def respond_with_resources_options
     {paginate: true}
+  end
+
+  private def image_params
+    params.permit(:source_url, :comment)
   end
 end
