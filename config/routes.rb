@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
+  get 'app' => 'app#index'
+
   namespace :api do
-    resources :images do
+    resources :images, only: %i(index show create destroy update) do
       resources :image_tags, path: 'tags', only: %i(index show create destroy)
     end
-    resources :tags
+    resources :tags, only: %i(index show create destroy update)
   end
 
   resources :tags do
