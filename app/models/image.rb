@@ -39,10 +39,56 @@ class Image < ActiveRecord::Base
 
   def extension
     url_ext = File.extname(URI(source_url).path) rescue ''
-    url_ext.empty? ? 'gif' : url_ext
+    url_ext.empty? ? 'gif' : url_ext[1..-1]
   end
 
   def set_storage_path!
     self.storage_path = "v1/#{self.sha[-2, 2] || ?_}/#{self.sha[-4, 2] || ?_}/#{self.sha}.#{self.extension}"
+  end
+
+  def mirror!
+    # XXX:
+    file = Tempfile.new("gjcase-mirror-#{self.id || Digest::SHA2.hexdigest(self.source_url)}")
+    system("curl", self.source_url, out: file) or raise 'curl failed'
+    file.rewind
+
+    self.sha = IO.popen([*%w(openssl dgst -sha256), in: file], 'r') do |io|
+      out = io.read.chomp
+      _, status = Process.waitpid2(io.pid)
+      raise 'openssl dgst -sha256 fail' unless status.success?
+      out
+    end
+    file.rewind
+
+    self.set_storage_path!
+
+    bucket = Rails.application.secrets.storage_master_bucket
+    s3 = Aws::S3::Client.new(region: Rails.application.secrets.storage_master_region)
+
+    begin
+      head = s3.head_object(bucket: bucket, key: self.storage_path)
+      return if head
+    rescue Aws::S3::Errors::NotFound
+    end
+
+    s3.put_object(
+      bucket: bucket,
+      key: self.storage_path,
+      content_type: self.guessed_content_type,
+      body: file,
+    )
+
+    self.save!
+  ensure
+    file.close! if file && !file.closed?
+  end
+
+  def guessed_content_type
+    mime_type = MIME::Types.type_for(self.extension).first
+    if mime_type
+      mime_type.content_type
+    else
+      'application/octet-stream'
+    end
   end
 end

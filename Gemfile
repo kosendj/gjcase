@@ -27,6 +27,8 @@ gem 'react-rails', git: 'https://github.com/reactjs/react-rails'
 gem 'sqlite3'
 gem 'mysql2'
 
+gem 'aws-sdk', '>= 2.1.2'
+
 group :development do
   gem 'haml-rails'
 end

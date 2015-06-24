@@ -71,6 +71,12 @@ GEM
       execjs
       json
     awesome_print (1.6.1)
+    aws-sdk (2.1.2)
+      aws-sdk-resources (= 2.1.2)
+    aws-sdk-core (2.1.2)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.1.2)
+      aws-sdk-core (= 2.1.2)
     babel-source (5.4.7)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
@@ -131,6 +137,8 @@ GEM
     jbuilder (2.2.16)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
+    jmespath (1.0.2)
+      multi_json (~> 1.0)
     jquery-rails (4.0.3)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -262,6 +270,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-sdk (>= 2.1.2)
   bootstrap-sass (~> 3.3.4)
   byebug
   coffee-rails (~> 4.1.0)
