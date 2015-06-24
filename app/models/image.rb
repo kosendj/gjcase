@@ -21,7 +21,28 @@ class Image < ActiveRecord::Base
 
   scope :unduplicated, -> { where(duplication_id: nil) }
 
+  def real_image_url
+    if self.storage_path && Rails.application.secrets.storage_url
+      "#{Rails.application.secrets.storage_url}/#{self.storage_path}"
+    else
+      source_url
+    end
+  end
+
   def image_url
-    source_url
+    if Rails.application.secrets.camo
+      Camo.new(Rails.application.secrets.camo, Rails.application.secrets.camo_url).url(real_image_url)
+    else
+      real_image_url
+    end
+  end
+
+  def extension
+    url_ext = File.extname(URI(source_url).path) rescue ''
+    url_ext.empty? ? 'gif' : url_ext
+  end
+
+  def set_storage_path!
+    self.storage_path = "v1/#{self.sha[-2, 2] || ?_}/#{self.sha[-4, 2] || ?_}/#{self.sha}.#{self.extension}"
   end
 end
