@@ -14,7 +14,6 @@ RSpec.describe Image, type: :model do
   describe "validation" do
     let(:image) { create(:image) }
     it "prevents source_url from update" do
-      p image.source_url
       expect(image).to be_valid
       image.source_url = 'xxx'
       expect(image).not_to be_valid
