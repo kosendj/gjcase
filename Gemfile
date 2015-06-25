@@ -29,6 +29,12 @@ gem 'mysql2'
 
 gem 'aws-sdk', '>= 2.1.2'
 
+gem 'redis'
+gem 'redis-namespace'
+
+gem 'sidekiq', '>= 3.4.1'
+gem 'sinatra', require: nil
+
 group :development do
   gem 'haml-rails'
 end

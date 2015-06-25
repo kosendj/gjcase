@@ -1,4 +1,7 @@
+require 'sidekiq/web'
 Rails.application.routes.draw do
+  mount Sidekiq::Web => '/sidekiq'
+
   namespace :api do
     resources :images do
       resources :image_tags, path: 'tags', only: %i(index show create destroy)
