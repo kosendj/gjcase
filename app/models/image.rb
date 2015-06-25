@@ -21,6 +21,8 @@ class Image < ActiveRecord::Base
 
   scope :unduplicated, -> { where(duplication_id: nil) }
 
+  after_create :automirror
+
   def real_image_url
     if self.storage_path && Rails.application.secrets.storage_url
       "#{Rails.application.secrets.storage_url}/#{self.storage_path}"
@@ -103,6 +105,12 @@ class Image < ActiveRecord::Base
       mime_type.content_type
     else
       'application/octet-stream'
+    end
+  end
+
+  private def automirror
+    if Rails.application.secrets.automirror
+      ImageMirrorJob.perform_async(self.id)
     end
   end
 end
