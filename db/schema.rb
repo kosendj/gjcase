@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150625152903) do
+ActiveRecord::Schema.define(version: 20150625194721) do
 
   create_table "images", force: :cascade do |t|
     t.string   "source_url",        limit: 255
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20150625152903) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.string   "source_identifier", limit: 255
+    t.boolean  "nsfw",              limit: 1
   end
 
   add_index "images", ["source_identifier"], name: "index_images_on_source_identifier", using: :btree

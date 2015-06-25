@@ -20,6 +20,7 @@ class Image < ActiveRecord::Base
   end
 
   scope :unduplicated, -> { where(duplication_id: nil) }
+  scope :safe, -> { where(nsfw: false) }
 
   after_create :automirror
 
