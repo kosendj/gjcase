@@ -25,6 +25,8 @@ class BulkTagAddPane extends React.Component {
 
   onTagChange(tag) {
     this.setState({tag: tag});
+    console.log(React.findDOMNode(this.refs.performButton))
+    setTimeout(() => React.findDOMNode(this.refs.performButton).focus(), 300);
   }
 
   get body() {
@@ -32,8 +34,8 @@ class BulkTagAddPane extends React.Component {
       return <span>Performing...</span>;
     } else {
       return <div className="panel-body">
-        <TagSelector onChange={this.onTagChange.bind(this)} autoFocus={true} />
-        <button className="btn btn-primary" onClick={this.perform.bind(this)} disabled={!this.state.tag}>Add!</button>
+        <TagSelector onChange={this.onTagChange.bind(this)} autoFocus={!this.state.tag} />
+        <button className="btn btn-primary" ref="performButton" onClick={this.perform.bind(this)} disabled={!this.state.tag}>Add!</button>
       </div>
     }
   }
