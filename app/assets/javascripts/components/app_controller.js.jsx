@@ -49,14 +49,37 @@ class AppController extends React.Component {
 
   onToolbarButton(name) {
     var func = {
-      bulk_tag_add: this.openBulkTagAdd.bind(this),
+      bulk_tag_add: this.openBulkTagAdd,
+      send_gj: this.sendToGJ,
     }[name]
 
-    func();
+    func.bind(this)();
   }
 
   openBulkTagAdd() {
     this.setState({pane_bulk_tag_add: true});
+  }
+
+  sendToGJ(dj) {
+    var urls = Object.getOwnPropertyNames(this.state.selected_images).map((image_id) => {
+      var image = this.state.selected_images[image_id];
+      return image.image_url;
+    });
+
+    var params = {urls: urls, dj: dj ? 'true' : 'false'};
+
+    var p = new Promise((resolve, reject) => {
+      $.ajax({
+        url: `${document.body.dataset.gjUrl}/gifs`,
+        method: 'POST',
+        data: params,
+      }).done((data, textStatus, xhr) => resolve([data, textStatus, xhr]))
+        .fail((xhr, textStatus, err)  => reject(err));
+    });
+    p.then((x) => {
+      console.log(x);
+      this.setState({selected_images: {}});
+    });
   }
 
   onTagChange(tag) {
