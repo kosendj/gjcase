@@ -7,7 +7,6 @@ class ImageView extends React.Component {
 
   get tagElems() {
     return (this.image.tags || []).map((tag) => {
-      console.log(tag);
       return <span className="label label-default tag-label" key={`tag-${tag.id}`} >{tag.name}</span>
     });
   }
