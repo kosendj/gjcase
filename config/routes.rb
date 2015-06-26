@@ -2,7 +2,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
 
-  get 'app' => 'app#index'
+  root 'app#index'
 
   namespace :api do
     resources :images, only: %i(index show create destroy update) do
