@@ -11,6 +11,7 @@ class Image < ActiveRecord::Base
   property :image_url
   collection :tags, selectable: true
 
+  link(:self) { api_image_path(self) }
   link(:tags) { api_image_image_tags_path(self) }
 
   validate do
