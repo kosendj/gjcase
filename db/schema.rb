@@ -15,17 +15,17 @@ ActiveRecord::Schema.define(version: 20150625194721) do
 
   create_table "images", force: :cascade do |t|
     t.string   "source_url",        limit: 255
-    t.text     "comment",           limit: 65535
+    t.text     "comment",           limit: 16777215
     t.string   "storage_path",      limit: 255
     t.string   "sha",               limit: 255
     t.integer  "duplication_id",    limit: 4
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.string   "source_identifier", limit: 255
     t.boolean  "nsfw",              limit: 1
   end
 
-  add_index "images", ["source_identifier"], name: "index_images_on_source_identifier", using: :btree
+  add_index "images", ["source_identifier"], name: "index_images_on_source_identifier", length: {"source_identifier"=>191}, using: :btree
 
   create_table "tag_assignments", force: :cascade do |t|
     t.integer  "tag_id",     limit: 4
