@@ -1,11 +1,19 @@
 "use strict";
 
-class Tag {
-  constructor(obj) {
-    this.name = obj.name
-    this.id = obj.id
-    this.parent_id = obj.parent_id
-    this.merged_to_id = obj.merged_to_id
+class GjcaseTag extends ApiBase {
+  static path() {
+    return "/api/tags";
+  }
+
+  static linkedClasses() {
+    return {
+      "images": GjcaseImage,
+    };
+  }
+
+  static collectionClasses() {
+    return {
+      "images": GjcaseImage,
+    };
   }
 }
-

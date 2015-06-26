@@ -1,6 +1,9 @@
 class Api::TagsController < Api::BaseController
   def require_resources
-    if params[:include_merged]
+    if params[:prefix].present?
+      params[:prefix].gsub!(/[▽▼]/,'') # SKK
+      @resources = Tag.where('name LIKE ?', "#{params[:prefix].gsub(/[%_]/, '\\\\\0')}%").includes(:merged_tag)
+    elsif params[:include_merged]
       @resources = Tag.all
     else
       @resources = Tag.active

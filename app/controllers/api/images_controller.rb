@@ -6,7 +6,7 @@ class Api::ImagesController < Api::BaseController
       @resources = Image.unduplicated
     end
 
-    if params[:tags]
+    if params[:tags].present?
       # XXX:
       tag_queries = [*params[:tags]]
       tag_ids = Tag.where(id: tag_queries.grep(/\A[0-9]+\z/)).pluck(:id) \
@@ -14,6 +14,8 @@ class Api::ImagesController < Api::BaseController
       image_ids = TagAssignment.where(tag_id: tag_ids).pluck(:image_id)
       @resources = @resources.where(id: image_ids).page(params[:page])
     end
+
+    @resources = @resources.includes(:tags)
   end
 
   def require_resource

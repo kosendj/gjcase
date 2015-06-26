@@ -1,19 +1,52 @@
+@import "bootstrap/variables";
+
 .images {
-  padding-top: 25px;
-  padding-bottom: 25px;
   .image {
-    float: left;
+    $blocksize: 24px;
 
-    width: 168px;
+    display: inline-block;
+    vertical-align: top;
 
-    margin-top: 12px;
-    margin-right: 12px;
-    margin-left: 6px;
-    margin-right: 6px;
+    width: $blocksize * 8;
+    height: ($blocksize * 5) + 40px;
+
+    margin-top: 8px;
+    margin-bottom: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
+
+    padding-top: 6px;
+    padding-bottom: 4px;
+    padding-left: 6px;
+    padding-right: 6px;
+
+    border-radius: 2px;
+
+    &:hover {
+      background-color: $gray-lighter;
+    }
+
+    &.selected-image {
+      background-color: lighten($brand-primary, 46.7%);
+
+      &:hover {
+        background-color: lighten($brand-primary, 40.7%);
+      }
+    }
 
     img {
-      min-width: 100%;
+      text-align: center;
+      width: auto;
+      height: auto;
       max-width: 100%;
+      max-height: $blocksize * 5;
+    }
+
+    .image-comment {
+      max-height: 40px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-wrap: break-word;
     }
   }
 }

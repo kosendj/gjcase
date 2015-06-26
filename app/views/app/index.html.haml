@@ -6,5 +6,9 @@
     = stylesheet_link_tag 'application' , media: 'all'
     = javascript_include_tag 'application'
     = csrf_meta_tags
-  %body{data: {tags: Tag.active.as_json.to_json }}
+  %body
+    -#.hidden
+      %datalist#tags_datalist
+        - Tag.active.each do |tag|
+          %option{value: tag.name, "data-tag_id": tag.id.to_s}= tag.name
     = react_component('AppController')
