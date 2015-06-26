@@ -25,6 +25,10 @@ class Image < ActiveRecord::Base
 
   after_create :automirror
 
+  def comment
+    (self.read_attribute(:comment) || '').gsub(/<.+?>/, '')
+  end
+
   def real_image_url
     if self.storage_path && Rails.application.secrets.storage_url
       "#{Rails.application.secrets.storage_url}/#{self.storage_path}"
