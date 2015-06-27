@@ -33,7 +33,7 @@ class Image < ActiveRecord::Base
     if self.storage_path && Rails.application.secrets.storage_url
       "#{Rails.application.secrets.storage_url}/#{self.storage_path}"
     elsif Rails.application.secrets.camo
-      Camo.new(Rails.application.secrets.camo_key, Rails.application.secrets.camo).url(source_url)
+      Camo.new(Rails.application.secrets.camo, Rails.application.secrets.camo_key).url(source_url)
     else
       source_url
     end
