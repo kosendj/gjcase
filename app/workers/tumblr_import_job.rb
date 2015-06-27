@@ -17,8 +17,7 @@ class TumblrImportJob
 
     def run!
       payload = get_photos(0)
-
-      break if payload['response'].empty?
+      return if payload['response'].empty?
 
       link_map = payload['response'].select{ |_| _['type'] == 'photo' && _['photos'] }.map do |item|
         [item['post_url'], comment: item['caption'], images: item['photos'].map { |_| _['original_size']['url'] rescue nil }.compact.select { |_| _.end_with?('.gif') }]
