@@ -29,19 +29,13 @@ class Image < ActiveRecord::Base
     (self.read_attribute(:comment) || '').gsub(/<.+?>/, '')
   end
 
-  def real_image_url
+  def image_url
     if self.storage_path && Rails.application.secrets.storage_url
       "#{Rails.application.secrets.storage_url}/#{self.storage_path}"
+    elsif Rails.application.secrets.camo
+      Camo.new(Rails.application.secrets.camo, Rails.application.secrets.camo_url).url(source_url)
     else
       source_url
-    end
-  end
-
-  def image_url
-    if Rails.application.secrets.camo
-      Camo.new(Rails.application.secrets.camo, Rails.application.secrets.camo_url).url(real_image_url)
-    else
-      real_image_url
     end
   end
 
