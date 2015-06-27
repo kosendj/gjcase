@@ -60,6 +60,14 @@ class TumblrImportJob
       response = open("http://api.tumblr.com/v2/tagged?tag=#{tag}&&api_key=#{@api_key}&offset=#{offset}", 'r', &:read)
       JSON.parse(response)
     end
+
+    private
+
+    def log(msg)
+      formatted = "[#{$$} TumblrImportJob(#{@tumblelog})] #{msg}"
+      Rails.logger.info formatted
+      puts formatted
+    end
   end
 
   class Importer
