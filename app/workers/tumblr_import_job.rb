@@ -7,6 +7,43 @@ class TumblrImportJob
     Importer.new(tumblelog).run!
   end
 
+  class SingleImporter
+    def initialize(url)
+      @api_key = Rails.application.secrets.tumblr_key
+      @url = URI.parse url
+    end
+
+    def get_post
+      id = @url.path.match(/\/post\/(.+?)/)[1]
+      response = open("http://api.tumblr.com/v2/blog/#{@url.host}/posts?id=#{id}&api_key=#{@api_key}", 'r', &:read)
+      JSON.parse(response)
+    end
+
+    def run!
+      payload = get_post
+
+      link_map = payload['response']['posts'].select{ |_| _['type'] == 'photo' && _['photos'] }.map do |item|
+        [item['post_url'], comment: item['caption'], images: item['photos'].map { |_| _['original_size']['url'] rescue nil }.compact.select { |_| _.end_with?('.gif') }]
+      end.to_h
+
+      Image.where(source_identifier: link_map.keys).pluck(:source_identifier).each do |x|
+        link_map.delete x
+      end
+
+      link_map.each do |link, x|
+        log " * #{link}"
+
+        x[:images].each do |url|
+          downloaded = true
+          comment = x[:comment]
+          image = Image.create!(source_url: url, source_identifier: link, comment: comment)
+          ImageMirrorJob.perform_async(image.id)
+          log "   #{url} => #{image.id}"
+        end
+      end
+    end
+  end
+
   class TagImporter
     def initialize(tag_id, tumbletag, max_offset = 1000)
       @api_key = Rails.application.secrets.tumblr_key
