@@ -4,12 +4,61 @@ class TumblrImportJob
   include Sidekiq::Worker
 
   def perform(tumblelog)
-    Importer.new(Rails.application.secrets.tumblr_key, tumblelog).run!
+    Importer.new(tumblelog).run!
+  end
+
+  class TagImporter
+    def initialize(tag, max_offset = 1000)
+      @api_key = Rails.application.secrets.tumblr_key
+      @tag = tag
+      @max_offset = max_offset
+    end
+
+    def run!
+      no_download_count = 0
+      downloaded = true
+      offset = 0
+      while no_download_count < 10 && offset < @max_offset
+        downloaded = false
+        payload = get_photos(offset)
+        log "=> Offset: #{offset}"
+
+        break if payload['response'].empty?
+
+        link_map = payload['response'].select{ |_| _['type'] == 'photo' && item['photos']}.map do |item|
+          [item['post_url'], comment: item['caption'], images: item['photos'].map { |_| _['original_size']['url'] rescue nil }.compact.select { |_| _.end_with?('.gif') }]
+        end.to_h
+
+        Image.where(source_identifier: link_map.keys).pluck(:source_identifier).each do |x|
+          link_map.delete x
+        end
+
+        link_map.each do |link, x|
+          log " * #{link}"
+
+          x[:images].each do |url|
+            downloaded = true
+            comment = x[:comment]
+            image = Image.create!(source_url: url, source_identifier: link, comment: comment)
+            ImageMirrorJob.perform_async(image.id)
+            log "   #{url} => #{image.id}"
+          end
+        end
+        if downloaded
+          no_download_count += 1 
+        else
+          no_download_count = 0
+        end
+        no_download_count = 0
+        offset += 20
+      end
+
+    end
   end
 
   class Importer
-    def initialize(api_key, tumblelog)
-      @api_key = api_key
+    def initialize(tumblelog)
+      @api_key = Rails.application.secrets.tumblr_key
       @tumblelog = tumblelog
     end
 
