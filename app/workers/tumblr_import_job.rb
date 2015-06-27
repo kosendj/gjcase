@@ -8,9 +8,10 @@ class TumblrImportJob
   end
 
   class TagImporter
-    def initialize(tag, max_offset = 1000)
+    def initialize(tag_id, tumbletag, max_offset = 1000)
       @api_key = Rails.application.secrets.tumblr_key
-      @tag = tag
+      @tag = Tag.find(tag_id)
+      @tumbletag = tumbletag
       @max_offset = max_offset
     end
 
@@ -39,7 +40,7 @@ class TumblrImportJob
           x[:images].each do |url|
             downloaded = true
             comment = x[:comment]
-            image = Image.create!(source_url: url, source_identifier: link, comment: comment)
+            image = Image.create!(source_url: url, source_identifier: link, comment: comment, tags: [@tag])
             ImageMirrorJob.perform_async(image.id)
             log "   #{url} => #{image.id}"
           end
