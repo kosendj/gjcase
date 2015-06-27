@@ -8,9 +8,10 @@ class TumblrImportJob
   end
 
   class SingleImporter
-    def initialize(url)
+    def initialize(url, tag_id=nil)
       @api_key = Rails.application.secrets.tumblr_key
       @url = URI.parse url
+      @tag = tag_id && Tag.find(tag_id)
     end
 
     def get_post
@@ -36,7 +37,7 @@ class TumblrImportJob
         x[:images].each do |url|
           downloaded = true
           comment = x[:comment]
-          image = Image.create!(source_url: url, source_identifier: link, comment: comment)
+          image = Image.create!(source_url: url, source_identifier: link, comment: comment, tags: @tag ? [@tag] : [])
           ImageMirrorJob.perform_async(image.id)
           log "   #{url} => #{image.id}"
         end
