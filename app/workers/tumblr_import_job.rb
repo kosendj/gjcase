@@ -15,7 +15,7 @@ class TumblrImportJob
     end
 
     def get_post
-      id = @url.path.match(/\/post\/(.+?)/)[1]
+      id = @url.path.match(/\/post\/(.+)/)[1]
       response = open("http://api.tumblr.com/v2/blog/#{@url.host}/posts?id=#{id}&api_key=#{@api_key}", 'r', &:read)
       JSON.parse(response)
     end
