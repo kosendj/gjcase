@@ -43,6 +43,13 @@ class TumblrImportJob
         end
       end
     end
+
+    def log(msg)
+      formatted = "[#{$$} TumblrImportJob(#{@tumblelog})] #{msg}"
+      Rails.logger.info formatted
+      puts formatted
+    end
+
   end
 
   class TagImporter
