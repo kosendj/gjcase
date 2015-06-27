@@ -52,7 +52,12 @@ class TumblrImportJob
         no_download_count = 0
         offset += 20
       end
+    end
 
+    def get_photos(offset=0)
+      tag = URI.encode_www_form_component(@tumbletag)
+      response = open("http://api.tumblr.com/v2/tagged?tag=#{tag}&&api_key=#{@api_key}&offset=#{offset}", 'r', &:read)
+      JSON.parse(response)
     end
   end
 
