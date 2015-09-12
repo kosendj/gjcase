@@ -15,7 +15,7 @@ class Api::ImagesController < Api::BaseController
       @resources = @resources.where(id: image_ids).page(params[:page])
     end
 
-    @resources = @resources.includes(:tags)
+    @resources = @resources.order(id: :desc).includes(:tags)
   end
 
   def require_resource
