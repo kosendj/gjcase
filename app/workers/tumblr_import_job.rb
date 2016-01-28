@@ -109,7 +109,7 @@ class TumblrImportJob
       no_download_count = 0
       downloaded = true
       offset = 0
-      while no_download_count < 10
+      while no_download_count < 50
         downloaded = false
         payload = get_photos(offset)
         log "=> Offset: #{offset}"
@@ -136,11 +136,10 @@ class TumblrImportJob
           end
         end
         if downloaded
-          no_download_count += 1 
-        else
           no_download_count = 0
+        else
+          no_download_count += 1 
         end
-        no_download_count = 0
         offset += 20
       end
     end
